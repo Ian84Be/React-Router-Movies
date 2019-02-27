@@ -12,17 +12,24 @@ export default class Movie extends Component {
   }
 
   componentDidMount() {
-    this.fetchMovie(this.props.match.params.id);
-  }
-
-  fetchMovie = id => {
+    const {id} = this.props.match.params;
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
       .then(response => {
         this.setState(() => ({ movie: response.data }));
       })
       .catch(error => console.error(error));
-  };
+  }
+
+  // fetchMovie = id => {
+  //   axios
+  //     .get(`http://localhost:5000/api/movies/${id}`)
+  //     .then(response => {
+  //       this.setState(() => ({ movie: response.data }));
+  //     })
+  //     .catch(error => console.error(error));
+  // };
+
   // Uncomment this code when you're ready for the stretch problems
   // componentWillReceiveProps(newProps){
   //   if(this.props.match.params.id !== newProps.match.params.id){
@@ -30,13 +37,16 @@ export default class Movie extends Component {
   //   }
   // }
 
-  // saveMovie = () => {
-  //   const addToSavedList = this.props.addToSavedList;
-  //   addToSavedList(this.state.movie)
-  // }
+  saveMovie = () => {
+    // const addToSavedList = this.props.addToSavedList;
+    // addToSavedList(this.state.movie);
+
+    this.props.addToSavedList(this.state.movie);
+  }
 
   render() {
-    if (!this.state.movie) return <div>Loading movie information...</div>;
-    return <MovieCard movie={this.state.movie} />
+   return !this.state.movie ?
+   <div>Loading...</div> : 
+   <MovieCard movie={this.state.movie} onClick={this.saveMovie}/>
   }
 }
